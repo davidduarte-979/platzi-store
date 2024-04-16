@@ -14,6 +14,8 @@ import {
 
 import { Response } from 'express';
 import { ProductsService } from 'src/services/products.service';
+import { ParseIntPipe } from './../common/parse-int.pipe';
+import { CreateProductDto } from './../dtos/products.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -35,18 +37,18 @@ export class ProductsController {
 
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
-  getProduct(@Param('productId') productId: string) {
+  getProduct(@Param('productId', ParseIntPipe) productId: number) {
     // using express
     // response.status(200).send({
     //   message: `Product ${productId}`,
     // });
-    const product = this.productService.findOne(+productId);
+    const product = this.productService.findOne(productId);
     return product;
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() payload: any) {
+  create(@Body() payload: CreateProductDto) {
     return this.productService.create(payload);
   }
 
