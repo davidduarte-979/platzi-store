@@ -10,7 +10,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('new')
+  @Get('/new')
   newEndpoint(): string {
     return "I'm new endpoint";
   }
