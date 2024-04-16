@@ -15,7 +15,7 @@ import {
 import { Response } from 'express';
 import { ProductsService } from 'src/services/products.service';
 import { ParseIntPipe } from './../common/parse-int.pipe';
-import { CreateProductDto } from './../dtos/products.dto';
+import { CreateProductDto, UpdateProductDto } from './../dtos/products.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -53,7 +53,7 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: any) {
+  update(@Param('id') id: number, @Body() payload: UpdateProductDto) {
     return this.productService.update(+id, payload);
   }
 
