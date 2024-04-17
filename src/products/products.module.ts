@@ -9,7 +9,13 @@ import { BrandController } from './controllers/brand.controller';
 import { OrdersController } from './controllers/orders.controller';
 
 @Module({
-  controllers: [ProductsController, CategoriesController, BrandController, OrdersController],
+  controllers: [
+    ProductsController,
+    CategoriesController,
+    BrandController,
+    OrdersController,
+  ],
   providers: [ProductsService, CategoriesService, OrdersService, BrandService],
+  exports: [ProductsService],
 })
 export class ProductsModule {}
