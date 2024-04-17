@@ -5,19 +5,24 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { lastValueFrom } from 'rxjs';
-
-const API_KEY = '12345';
-const API_KEY_PROD = 'PROD12345';
+import { DatabaseModule } from './database/database.module';
+import { ConfigModule } from '@nestjs/config';
+import { environments } from 'environments';
 
 @Module({
-  imports: [UsersModule, ProductsModule, HttpModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: environments[process.env.NODE_ENV] || '.env',
+      isGlobal: true,
+    }),
+    UsersModule,
+    ProductsModule,
+    HttpModule,
+    DatabaseModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: 'API_KEY',
-      useValue: process.env.NODE_ENV === 'prod' ? API_KEY : API_KEY_PROD,
-    },
     {
       provide: 'TASKS',
       useFactory: async (http: HttpService) => {
