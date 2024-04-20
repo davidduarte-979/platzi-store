@@ -28,6 +28,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsPositive()
   readonly price: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @IsPositive()
+  readonly brandId: number;
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
