@@ -35,7 +35,7 @@ export class ProductsController {
     @Query('offset') offset = 0,
     @Query('brand') brand: string,
   ) {
-    console.log(limit, offset, brand);
+    console.log('Query params =>', limit, offset, brand);
     return this.productService.findAll();
   }
 
@@ -57,13 +57,16 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: UpdateProductDto) {
-    return this.productService.update(+id, payload);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateProductDto,
+  ) {
+    return this.productService.update(id, payload);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
-  delete(@Param('id') id: number) {
-    return this.productService.delete(+id);
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.delete(id);
   }
 }
