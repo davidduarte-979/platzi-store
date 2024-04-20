@@ -5,11 +5,13 @@ import { ProductsService } from 'src/products/services/products.service';
 import { Client } from 'pg';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CustomersService } from './customers.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private productService: ProductsService,
+    private customerService: CustomersService,
     @Inject('PG') private clientPg: Client,
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
@@ -26,7 +28,7 @@ export class UsersService {
   }
 
   findAll() {
-    return this.userRepo.find();
+    return this.userRepo.find({ relations: ['customer'] });
   }
 
   async findOne(id: number) {
@@ -37,8 +39,12 @@ export class UsersService {
     return product;
   }
 
-  create(data: CreateUserDto) {
+  async create(data: CreateUserDto) {
     const newProduct = this.userRepo.create(data);
+    if (data.customerId) {
+      const customer = await this.customerService.findOne(data.customerId);
+      newProduct.customer = customer;
+    }
     return this.userRepo.save(newProduct);
   }
 
