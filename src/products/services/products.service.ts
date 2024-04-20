@@ -37,7 +37,7 @@ export class ProductsService {
     return this.productRepo.save(product);
   }
 
-  delete(id: number) {
+  remove(id: number) {
     return this.productRepo.delete(id);
   }
 }

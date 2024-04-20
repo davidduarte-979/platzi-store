@@ -67,6 +67,6 @@ export class ProductsController {
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
   delete(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.delete(id);
+    return this.productService.remove(id);
   }
 }
