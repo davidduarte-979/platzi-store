@@ -7,7 +7,6 @@ import { BrandController } from './controllers/brand.controller';
 import { OrdersController } from './controllers/orders.controller';
 import { ProductsService } from './services/products.service';
 import { CategoriesService } from './services/categories.service';
-import { OrdersService } from './services/orders.service';
 import { BrandService } from './services/brand.service';
 import { Product } from './entities/product.entity';
 import { Brand } from './entities/brand.entity';
@@ -21,7 +20,7 @@ import { Category } from './entities/category.entity';
     BrandController,
     OrdersController,
   ],
-  providers: [ProductsService, CategoriesService, OrdersService, BrandService],
+  providers: [ProductsService, CategoriesService, BrandService],
   exports: [ProductsService],
 })
 export class ProductsModule {}
