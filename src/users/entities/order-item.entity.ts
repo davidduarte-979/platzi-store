@@ -8,12 +8,14 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Order } from './order.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Exclude()
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
