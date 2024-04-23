@@ -12,7 +12,9 @@ export class OrdersService {
     @InjectRepository(Customer) private customerRepo: Repository<Customer>,
   ) {}
   findAll() {
-    return this.orderRepo.find({ relations: ['customer'] });
+    return this.orderRepo.find({
+      relations: ['items', 'items.product'],
+    });
   }
 
   async findOne(id: number) {

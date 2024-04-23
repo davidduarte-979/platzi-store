@@ -21,6 +21,6 @@ import { Category } from './entities/category.entity';
     OrdersController,
   ],
   providers: [ProductsService, CategoriesService, BrandService],
-  exports: [ProductsService],
+  exports: [ProductsService, TypeOrmModule],
 })
 export class ProductsModule {}
