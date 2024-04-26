@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -21,7 +20,7 @@ import configSchema from './configSchema';
       isGlobal: true,
       validationSchema: configSchema,
     }),
-    UsersModule,
+    // UsersModule,
     ProductsModule,
     HttpModule,
     DatabaseModule,
@@ -32,7 +31,6 @@ import configSchema from './configSchema';
     {
       provide: 'TASKS',
       useFactory: async (http: HttpService) => {
-        // eslint-disable-next-line prettier/prettier
         const request = http.get('https://jsonplaceholder.typicode.com/todos');
 
         const tasks = await lastValueFrom(request);

@@ -9,6 +9,8 @@ const configSchema = Joi.object({
   POSTGRES_PASSWORD: Joi.string().required(),
   POSTGRES_PORT: Joi.number().required(),
   POSTGRES_HOST: Joi.string().hostname().required(),
+  MONGO_DB_URI: Joi.string().required(),
+  MONGO_DB_NAME: Joi.string().required(),
 });
 
 export default configSchema;

@@ -28,6 +28,6 @@ export class Category {
   })
   updateAt: Date;
 
-  @ManyToMany(() => Product, (product) => product.categories)
+  // @ManyToMany(() => Product, (product) => product.categories)
   products: Product[];
 }

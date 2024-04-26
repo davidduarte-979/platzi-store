@@ -21,6 +21,7 @@ import {
   FilterProductsDto,
   UpdateProductDto,
 } from '../dtos/products.dto';
+import { MongoIdPipe } from 'src/common/mongo-id.pipe';
 
 @ApiTags('Products')
 @Controller('products')
@@ -34,17 +35,13 @@ export class ProductsController {
 
   @Get()
   @ApiOperation({ summary: 'List of Products' })
-  getProducts(@Query() params: FilterProductsDto) {
-    return this.productService.findAll(params);
+  getProducts() {
+    return this.productService.findAll();
   }
 
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
-  getProduct(@Param('productId', ParseIntPipe) productId: number) {
-    // using express
-    // response.status(200).send({
-    //   message: `Product ${productId}`,
-    // });
+  getProduct(@Param('productId', MongoIdPipe) productId: string) {
     const product = this.productService.findOne(productId);
     return product;
   }
@@ -57,7 +54,7 @@ export class ProductsController {
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateProductDto,
   ) {
     return this.productService.update(id, payload);
@@ -65,25 +62,25 @@ export class ProductsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id', MongoIdPipe) id: string) {
     return this.productService.remove(id);
   }
 
-  @Delete(':id/category/:categoryId')
-  @HttpCode(HttpStatus.ACCEPTED)
-  deleteCategory(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('categoryId', ParseIntPipe) categoryId: number,
-  ) {
-    return this.productService.removeCategoryByProduct(id, categoryId);
-  }
+  // @Delete(':id/category/:categoryId')
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // deleteCategory(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Param('categoryId', ParseIntPipe) categoryId: number,
+  // ) {
+  //   return this.productService.removeCategoryByProduct(id, categoryId);
+  // }
 
-  @Put(':id/category/:categoryId')
-  @HttpCode(HttpStatus.ACCEPTED)
-  addCategoryToProduct(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('categoryId', ParseIntPipe) categoryId: number,
-  ) {
-    return this.productService.addCategoryByProduct(id, categoryId);
-  }
+  // @Put(':id/category/:categoryId')
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // addCategoryToProduct(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Param('categoryId', ParseIntPipe) categoryId: number,
+  // ) {
+  //   return this.productService.addCategoryByProduct(id, categoryId);
+  // }
 }

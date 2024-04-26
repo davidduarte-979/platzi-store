@@ -19,6 +19,10 @@ export default registerAs('config', () => {
       port: +process.env.MYSQL_PORT,
       host: process.env.MYSQL_HOST,
     },
+    mongo: {
+      dbUri: process.env.MONGO_DB_URI,
+      dbName: process.env.MONGO_DB_NAME,
+    },
     apiKey: process.env.API_KEY,
   };
 });

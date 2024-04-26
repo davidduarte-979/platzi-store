@@ -29,6 +29,7 @@ export class CreateProductDto {
 
   @IsNumber()
   @IsNotEmpty()
+  @ApiProperty()
   readonly stock: number;
 
   @IsNumber()
@@ -37,16 +38,16 @@ export class CreateProductDto {
   @ApiProperty()
   readonly price: number;
 
-  @IsNumber()
-  @IsNotEmpty()
-  @IsPositive()
-  @ApiProperty()
-  readonly brandId: number;
+  // @IsNumber()
+  // @IsNotEmpty()
+  // @IsPositive()
+  // @ApiProperty()
+  // readonly brandId: number;
 
-  @IsArray()
-  @IsNotEmpty()
-  @ApiProperty()
-  readonly categoriesIds: number[];
+  // @IsArray()
+  // @IsNotEmpty()
+  // @ApiProperty()
+  // readonly categoriesIds: number[];
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
