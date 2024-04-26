@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const product = await this.userRepo.findOne(id);
+    const product = await this.userRepo.findOne({ where: { id } });
     if (!product) {
       throw new NotFoundException(`Product ${id} not found`);
     }
@@ -49,7 +49,7 @@ export class UsersService {
   }
 
   async update(id: number, payload: UpdateUserDto) {
-    const product = await this.userRepo.findOne(id);
+    const product = await this.userRepo.findOne({ where: { id } });
     this.userRepo.merge(product, payload);
     return this.userRepo.save(product);
   }

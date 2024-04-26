@@ -15,7 +15,7 @@ export class CustomersService {
   }
 
   async findOne(id: number) {
-    const product = await this.customerRepo.findOne(id);
+    const product = await this.customerRepo.findOne({ where: { id } });
     if (!product) {
       throw new NotFoundException(`Product ${id} not found`);
     }
@@ -28,7 +28,7 @@ export class CustomersService {
   }
 
   async update(id: number, payload: UpdateCustomerDto) {
-    const product = await this.customerRepo.findOne(id);
+    const product = await this.customerRepo.findOne({ where: { id } });
     this.customerRepo.merge(product, payload);
     return this.customerRepo.save(product);
   }

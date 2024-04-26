@@ -18,7 +18,7 @@ export class OrdersService {
   }
 
   async findOne(id: number) {
-    const order = await this.orderRepo.findOne(id);
+    const order = await this.orderRepo.findOne({ where: { id } });
     if (!order) {
       throw new NotFoundException(`order ${id} not found`);
     }
@@ -28,16 +28,20 @@ export class OrdersService {
   async create(data: CreateOrderDto) {
     const order = new Order();
     if (data.customerId) {
-      const customer = await this.customerRepo.findOne(data.customerId);
+      const customer = await this.customerRepo.findOne({
+        where: { id: data.customerId },
+      });
       order.customer = customer;
     }
     return this.orderRepo.save(order);
   }
 
   async update(id: number, payload: UpdateOrderDto) {
-    const order = await this.orderRepo.findOne(id);
+    const order = await this.orderRepo.findOne({ where: { id } });
     if (payload.customerId) {
-      const customer = await this.customerRepo.findOne(payload.customerId);
+      const customer = await this.customerRepo.findOne({
+        where: { id: payload.customerId },
+      });
       order.customer = customer;
     }
     return this.orderRepo.save(order);

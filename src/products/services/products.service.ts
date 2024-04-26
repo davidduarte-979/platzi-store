@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, FindConditions } from 'typeorm';
+import { Repository, Between, FindOptionsWhere, In } from 'typeorm';
 
 import {
   CreateProductDto,
@@ -21,7 +21,7 @@ export class ProductsService {
 
   findAll(params?: FilterProductsDto) {
     if (params) {
-      const where: FindConditions<Product> = {};
+      const where: FindOptionsWhere<Product> = {};
       const { limit, offset, minPrice, maxPrice } = params;
 
       if (minPrice && maxPrice) {
@@ -41,7 +41,8 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const product = await this.productRepo.findOne(id, {
+    const product = await this.productRepo.findOne({
+      where: { id },
       relations: ['brand', 'categories'],
     });
     if (!product) {
@@ -54,7 +55,9 @@ export class ProductsService {
     const newProduct = this.productRepo.create(data);
 
     if (data.brandId) {
-      const brand = await this.brandRepo.findOne(data.brandId);
+      const brand = await this.brandRepo.findOne({
+        where: { id: data.brandId },
+      });
       newProduct.brand = brand;
     }
 
@@ -67,17 +70,19 @@ export class ProductsService {
   }
 
   async update(id: number, payload: UpdateProductDto) {
-    const product = await this.productRepo.findOne(id);
+    const product = await this.productRepo.findOne({ where: { id } });
 
     if (payload.brandId) {
-      const brand = await this.brandRepo.findOne(payload.brandId);
+      const brand = await this.brandRepo.findOne({
+        where: { id: payload.brandId },
+      });
       product.brand = brand;
     }
 
     if (payload.categoriesIds) {
-      const categories = await this.categoryRepo.findByIds(
-        payload.categoriesIds,
-      );
+      const categories = await this.categoryRepo.findBy({
+        id: In(payload.categoriesIds),
+      });
       product.categories = categories;
     }
 
@@ -90,7 +95,8 @@ export class ProductsService {
   }
 
   async removeCategoryByProduct(productId: number, categoryId: number) {
-    const product = await this.productRepo.findOne(productId, {
+    const product = await this.productRepo.findOne({
+      where: { id: productId },
       relations: ['categories'],
     });
     product.categories = product.categories.filter(
@@ -100,11 +106,14 @@ export class ProductsService {
   }
 
   async addCategoryByProduct(productId: number, categoryId: number) {
-    const product = await this.productRepo.findOne(productId, {
+    const product = await this.productRepo.findOne({
+      where: { id: productId },
       relations: ['categories'],
     });
 
-    const category = await this.categoryRepo.findOne(categoryId);
+    const category = await this.categoryRepo.findOne({
+      where: { id: categoryId },
+    });
 
     product.categories.push(category);
 
