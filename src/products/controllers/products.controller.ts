@@ -35,8 +35,8 @@ export class ProductsController {
 
   @Get()
   @ApiOperation({ summary: 'List of Products' })
-  getProducts() {
-    return this.productService.findAll();
+  getProducts(@Query() params: FilterProductsDto) {
+    return this.productService.findAll(params);
   }
 
   @Get(':productId')

@@ -11,7 +11,7 @@ import { Product } from 'src/products/entities/product.entity';
 import { Category } from '../entities/category.entity';
 import { Brand } from '../entities/brand.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 
 @Injectable()
 export class ProductsService {
@@ -19,7 +19,15 @@ export class ProductsService {
     @InjectModel(Product.name) private productModel: Model<Product>,
   ) {}
 
-  findAll() {
+  findAll(params?: FilterProductsDto) {
+    if (params) {
+      const filter: FilterQuery<Product> = {};
+      const { limit, offset, minPrice, maxPrice } = params;
+      if (minPrice && maxPrice) {
+        filter.price = { $gte: minPrice, $lte: maxPrice };
+      }
+      return this.productModel.find(filter).skip(offset).limit(limit).exec();
+    }
     return this.productModel.find().exec();
   }
 
