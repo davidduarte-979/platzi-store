@@ -1,36 +1,13 @@
-import {
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Entity,
-  OneToMany,
-} from 'typeorm';
-import { Product } from './product.entity';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-@Entity()
-export class Brand {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ type: 'varchar', length: 255, unique: true })
+@Schema()
+export class Brand extends Document {
+  @Prop({ required: true, unique: true })
   name: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Prop()
   image: string;
-
-  @CreateDateColumn({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updateAt: Date;
-
-  // @OneToMany(() => Product, (product) => product.brand)
-  products: Product[];
 }
+
+export const BrandSchema = SchemaFactory.createForClass(Brand);

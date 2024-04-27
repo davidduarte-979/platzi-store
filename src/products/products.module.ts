@@ -9,24 +9,27 @@ import { ProductsService } from './services/products.service';
 import { CategoriesService } from './services/categories.service';
 import { BrandService } from './services/brand.service';
 import { Product, ProductSchema } from './entities/product.entity';
-import { Brand } from './entities/brand.entity';
+import { Brand, BrandSchema } from './entities/brand.entity';
 import { Category } from './entities/category.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+    MongooseModule.forFeature([
+      { name: Product.name, schema: ProductSchema },
+      { name: Brand.name, schema: BrandSchema },
+    ]),
   ],
   controllers: [
     ProductsController,
     // CategoriesController,
-    // BrandController,
+    BrandController,
     // OrdersController,
   ],
   providers: [
     ProductsService,
     // CategoriesService,
-    // BrandService
+    BrandService,
   ],
   exports: [ProductsService],
 })

@@ -1,63 +1,19 @@
-import {
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
+
 import { Customer } from './customer.entity';
-import { OrderItem } from './order-item.entity';
+import { Product } from 'src/products/entities/product.entity';
 
-import { Exclude, Expose } from 'class-transformer';
+@Schema()
+export class Order extends Document {
+  @Prop({ type: Date })
+  date: Date;
 
-@Entity()
-export class Order {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @Prop({ type: Types.ObjectId, ref: Customer.name, required: true })
+  customer: Customer | Types.ObjectId;
 
-  @ManyToOne(() => Customer, (customer) => customer.orders)
-  customer: Customer;
-
-  @CreateDateColumn({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updateAt: Date;
-
-  @Exclude()
-  @OneToMany(() => OrderItem, (orderItems) => orderItems.order)
-  items: OrderItem[];
-
-  @Expose()
-  get products() {
-    if (this.items) {
-      return this.items
-        .filter((item) => !!item)
-        .map((item) => ({
-          ...item,
-          quantity: item.quantity,
-        }));
-    }
-    return [];
-  }
-
-  @Expose()
-  get total() {
-    if (this.items) {
-      return this.items
-        .filter((item) => !!item)
-        .reduce((acc, item) => {
-          const totalItem = item.product.price * item.quantity;
-          return acc + totalItem;
-        }, 0);
-    }
-    return 0;
-  }
+  @Prop({ type: [{ type: Types.ObjectId, ref: Product.name }] })
+  products: Types.Array<Product>;
 }
+
+export const OrderSchema = SchemaFactory.createForClass(Order);

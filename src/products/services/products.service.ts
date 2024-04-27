@@ -20,7 +20,7 @@ export class ProductsService {
   ) {}
 
   findAll(params?: FilterProductsDto) {
-    if (params) {
+    if (params && JSON.stringify(params) !== '{}') {
       const filter: FilterQuery<Product> = {};
       const { limit, offset, minPrice, maxPrice } = params;
       if (minPrice && maxPrice) {
@@ -28,7 +28,7 @@ export class ProductsService {
       }
       return this.productModel.find(filter).skip(offset).limit(limit).exec();
     }
-    return this.productModel.find().exec();
+    return this.productModel.find();
   }
 
   async findOne(id: string) {

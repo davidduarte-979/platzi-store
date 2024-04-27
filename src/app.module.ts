@@ -20,7 +20,7 @@ import configSchema from './configSchema';
       isGlobal: true,
       validationSchema: configSchema,
     }),
-    // UsersModule,
+    UsersModule,
     ProductsModule,
     HttpModule,
     DatabaseModule,
