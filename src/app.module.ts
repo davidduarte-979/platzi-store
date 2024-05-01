@@ -10,6 +10,7 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { environments } from 'environments';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
 import configSchema from './configSchema';
 
@@ -25,6 +26,7 @@ import configSchema from './configSchema';
     ProductsModule,
     HttpModule,
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
