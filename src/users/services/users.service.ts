@@ -37,9 +37,10 @@ export class UsersService {
     };
   }
 
-  create(data: CreateUserDto) {
+  async create(data: CreateUserDto) {
     const newModel = new this.userModel(data);
-    return newModel.save();
+    const model = await newModel.save();
+    return model.toJSON();
   }
 
   update(id: string, changes: UpdateUserDto) {

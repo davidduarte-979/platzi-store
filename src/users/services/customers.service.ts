@@ -19,10 +19,10 @@ export class CustomersService {
     return this.customerModel.findById(id);
   }
 
-  create(data: CreateCustomerDto) {
-    console.log(data);
+  async create(data: CreateCustomerDto) {
     const newModel = new this.customerModel(data);
-    return newModel.save();
+    const model = await newModel.save();
+    return model.toJSON();
   }
 
   update(id: string, changes: UpdateCustomerDto) {

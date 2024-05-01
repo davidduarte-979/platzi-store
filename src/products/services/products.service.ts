@@ -19,7 +19,7 @@ export class ProductsService {
     @InjectModel(Product.name) private productModel: Model<Product>,
   ) {}
 
-  findAll(params?: FilterProductsDto) {
+  async findAll(params?: FilterProductsDto) {
     if (params && JSON.stringify(params) !== '{}') {
       const filter: FilterQuery<Product> = {};
       const { limit, offset, minPrice, maxPrice } = params;
@@ -28,7 +28,8 @@ export class ProductsService {
       }
       return this.productModel.find(filter).skip(offset).limit(limit).exec();
     }
-    return this.productModel.find();
+    const products = await this.productModel.find();
+    return products;
   }
 
   async findOne(id: string) {
@@ -36,7 +37,7 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException(`Product ${id} not found`);
     }
-    return product.toObject();
+    return product.toJSON();
   }
 
   async create(data: CreateProductDto) {
