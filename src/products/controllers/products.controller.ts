@@ -10,6 +10,7 @@ import {
   Put,
   Query,
   // Res,
+  UseGuards,
 } from '@nestjs/common';
 // import { Response } from 'express';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -21,7 +22,13 @@ import {
   FilterProductsDto,
   UpdateProductDto,
 } from '../dtos/products.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/roles.model';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Products')
 @Controller('products')
 export class ProductsController {
@@ -32,12 +39,14 @@ export class ProductsController {
     return { message: `products filter 1` };
   }
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'List of Products' })
   getProducts(@Query() params: FilterProductsDto) {
     return this.productService.findAll(params);
   }
 
+  @Public()
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
   getProduct(@Param('productId', ParseIntPipe) productId: number) {
@@ -49,6 +58,7 @@ export class ProductsController {
     return product;
   }
 
+  @Roles(Role.ADMIN)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() payload: CreateProductDto) {
